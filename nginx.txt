@@ -27,6 +27,3 @@ ps aux |grep nginx
 
 yum 安装可加入-y选项 如 yum localinstall -y http://dev.mysql.com/get/mysql57-community-release-el7-7.noarch.rpm
 
-
-
-test
