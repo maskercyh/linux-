@@ -4,6 +4,7 @@ yum -y install mysql57-community-release-el7-11.noarch.rpm
 yum repolist enabled | grep mysql.*
 yum install mysql-community-server
 
+test
 
 //¿ªÆômysql
 
