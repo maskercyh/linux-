@@ -1,0 +1,21 @@
+wget https://files.phpmyadmin.net/phpMyAdmin/4.7.0/phpMyAdmin-4.7.0-all-languages.zip
+
+2.解压phpmyadmin包
+
+unzip phpMyAdmin-4.7.0-all-languages.zip
+2.如果没有安装unzip和zip，请先安装，然后再执行上面的操作
+
+yum install zip unzip -y
+
+
+3.将解压后的phpmyadmin移动到/var/www/html/phpmyadmin文件夹下
+
+3.1首先创建phpmyadmin文件夹
+mkdir /var/www/html/phpmyadmin
+
+3.2移动文件
+mv phpMyAdmin-4.7.0-all-languages/* /var/www/html/phpmyadmin/
+
+
+4.重启nginx服务器
+systemctl restart nginx

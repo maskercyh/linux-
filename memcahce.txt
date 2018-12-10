@@ -1,0 +1,13 @@
+Ŀ¼/usr/local/src
+git clone https://github.com/websupport-sk/pecl-memcache memcache
+cd memcache
+/usr/bin/phpize
+./configure --with-php-config=/usr/bin/php-config
+ make && make install
+ 
+
+extension=memcache.so
+
+
+systemctl reload nginx
+systemctl reload php-fpm

@@ -1,0 +1,15 @@
+如要隐藏http://test.com/index.php/think 中的index需要在vhost.conf中配置当前test域名下的
+ 	location / {
+
+            index  index.html index.htm index.php;
+            #autoindex  on;
+
+	   //我是需要添加的部分
+
+            if (!-e $request_filename) {
+                rewrite  ^(.*)$  /index.php?s=/$1  last;
+            }
+
+           // 结束
+
+        }

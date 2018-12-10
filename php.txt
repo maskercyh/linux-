@@ -1,0 +1,84 @@
+rpm -Uvh https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+
+rpm -Uvh https://mirror.webtatic.com/yum/el7/webtatic-release.rpm
+
+//查看
+yum search php71w
+
+//安装php以及扩展
+yum install php71w php71w-fpm php71w-cli php71w-common php71w-devel php71w-gd php71w-pdo php71w-mysqlnd php71w-mbstring php71w-bcmath
+
+//开启服务
+//开机开启
+service php-fpm start
+systemctl enable php-fpm
+
+修改/etc/nginx/config.d/config
+
+
+server {
+        listen       80;
+        server_name  localhost;
+
+        #charset koi8-r;
+
+        #access_log  logs/host.access.log  main;
+        root    var/www;
+        location / {
+            index  index.html index.htm index.php l.php;
+           autoindex  off;
+        }
+
+        #error_page  404              /404.html;
+
+        # redirect server error pages to the static page /50x.html
+        #
+        error_page   500 502 503 504  /50x.html;
+        location = /50x.html {
+            root   var/www;
+        }
+
+        # proxy the PHP scripts to Apache listening on 127.0.0.1:80
+        #
+        #location ~ \.php$ {
+        #    proxy_pass   http://127.0.0.1;
+        #}
+
+        # pass the PHP scripts to FastCGI server listening on 127.0.0.1:9000
+        #
+        location ~ \.php(.*)$  {
+            fastcgi_pass   127.0.0.1:9000;
+            fastcgi_index  index.php;
+            fastcgi_split_path_info  ^((?U).+\.php)(/?.+)$;
+            fastcgi_param  SCRIPT_FILENAME  $document_root$fastcgi_script_name;
+            fastcgi_param  PATH_INFO  $fastcgi_path_info;
+            fastcgi_param  PATH_TRANSLATED  $document_root$fastcgi_path_info;
+            include        fastcgi_params;
+        }
+
+        # deny access to .htaccess files, if Apache's document root
+        # concurs with nginx's one
+        #
+        #location ~ /\.ht {
+        #    deny  all;
+        #}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+service nginx restart
+
+
+yum 安装可加入-y选项 如 yum localinstall -y http://dev.mysql.com/get/mysql57-community-release-el7-7.noarch.rpm
+
+

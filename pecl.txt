@@ -1,0 +1,11 @@
+ubuntu
+wget http://pear.php.net/go-pear.phar
+
+chmod -R 777 go-pear.phar
+
+php go-pear.php
+
+centos
+
+yum install php-pear php-devel
+

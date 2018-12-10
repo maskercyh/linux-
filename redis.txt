@@ -1,0 +1,29 @@
+yum install wget  make gcc gcc-c++ zlib-devel openssl openssl-devel pcre-devel kernel keyutils  patch perl
+//安装 gcc
+
+
+yum info redis 
+//查看是由有redis包
+如没有  yum install epel-release
+有 yum install -y redis
+
+安装php redis扩展 在 /usr/local/src/
+手动下载https://github.com/nicolasff/phpredis/archive/2.2.4.tar.gz
+//两个包源不同不能就换一下
+或git clone https://github.com/phpredis/phpredis
+tar zxvf phpredis-2.2.4.tar.gz
+tar zxvf 解压包 
+cd 包
+/usr/bin/phpize   //本机安装目录可能不同 以实际php安装路径为准
+./configure --with-php-config=/usr/bin/php-config  //同上
+make && make install
+在/etc/php.ini中添加 
+
+
+systemctl reload nginx
+systemctl reload php-fpm
+systemctl start redis
+
+extension="redis.so"
+
+

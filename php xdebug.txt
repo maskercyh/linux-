@@ -1,0 +1,29 @@
+打开http://www.xdebug.org/download.php下载相应的版本
+Win：将下载的dll文件放到相应的目录中。比如我的就放D:\xampp\php\ext下面；
+
+Linux:执行安装文件
+tar -xvzf xdebug-2.1.2.tgz
+cd  xdebug-2.1.2
+phpize (如果phpize没有这个command,需要安装一次phpize。phpize可以让php支持扩展模块)安装phpize:sudo apt-get install php5-dev
+如果安装了继续进行下面命令
+./configure
+make
+make install
+
+
+zend_extension="D:\phpstudy\PHPTutorial\php\php-7.2.1-nts\ext\php_xdebug.dll"   (Win)
+
+zend_extension= /usr/lib/php5/20090626+lfs/xdebug.so （Linux）
+
+
+zend_extension="D:\phpstudy\PHPTutorial\php\php-7.2.1-nts\ext\php_xdebug.dll"
+
+xdebug.profiler_enable=on
+xdebug.profiler_output_dir="D:\phpstudy\PHPTutorial\tmp\xdebug"
+xdebug.trace_output_dir="D:\phpstudy\PHPTutorial\tmp\xdebug"
+
+xdebug.remote_enable = On  
+xdebug.remote_handler = dbgp     
+xdebug.remote_host= localhost  
+xdebug.remote_port = 9000  
+xdebug.idekey = PHPSTORM

@@ -1,0 +1,28 @@
+rpm -Uvh http://nginx.org/packages/centos/7/noarch/RPMS/nginx-release-centos-7-0.el7.ngx.noarch.rpm 
+yum install nginx 
+service nginx start
+systemctl enable nginx 
+
+
+ps aux |grep nginx
+
+1.选择镜像包
+2.安装
+3.启动
+如日志文件报错 Permission denied
+1.www入目文件权限不够 chmod -R 777 www
+2.php-fpm没有开启  请执行 systemctl start php-fpm （systemctl enable php-fpm 开机自启）
+3. ps aux | grep nginx   查看开启用户  nginx开启用户权限不够 。请在/etc/nginx/config中吧第一行中的user nginx改成user root并重启nginx
+4.selinux开启状态（enabled）的原因，请在/etc/selinux/config吧 SELINUX 隐蔽并更改为SELINUX=disabled 并重启reboot
+查看进程端口netstat -natp
+
+
+
+
+
+
+
+
+
+yum 安装可加入-y选项 如 yum localinstall -y http://dev.mysql.com/get/mysql57-community-release-el7-7.noarch.rpm
+

@@ -1,0 +1,175 @@
+安装好的nginx找到conf文件夹
+以此文件夹目录找到nginx.conf,并在该文件夹内找到conf.d文件夹（如没有自建mkdir conf.d）在该文件夹内创建vhost.conf
+
+
+以下是nginx.conf 配置
+
+
+user  root;  //启用用户改为root
+worker_processes  auto; //worker_processes指令控制工作进程数auto最方便根据cup核心数定义
+
+error_log  /var/log/nginx/error.log warn;   //***日志文件
+
+
+pid        /var/run/nginx.pid; //pid文件
+
+
+events {
+    worker_connections  1024; //进程最大打开的连接数
+}
+
+
+http {
+    include       mime.types;
+    default_type  application/octet-stream;
+
+    #log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '
+    #                  '$status $body_bytes_sent "$http_referer" '
+    #                  '"$http_user_agent" "$http_x_forwarded_for"';
+
+    #access_log  logs/access.log  main;
+
+    sendfile        on;
+    #tcp_nopush     on;
+
+    #keepalive_timeout  0;
+    keepalive_timeout  65;
+
+    #gzip  on;
+
+
+
+    # another virtual host using mix of IP-, name-, and port-based configuration
+    #
+    #server {
+    #    listen       8000;
+    #    listen       somename:8080;
+    #    server_name  somename  alias  another.alias;
+
+    #    location / {
+    #        root   html;
+    #        index  index.html index.htm;
+    #    }
+    #}
+
+
+    # HTTPS server
+    #
+    #server {
+    #    listen       443 ssl;
+    #    server_name  localhost;
+
+    #    ssl_certificate      cert.pem;
+    #    ssl_certificate_key  cert.key;
+
+    #    ssl_session_cache    shared:SSL:1m;
+    #    ssl_session_timeout  5m;
+
+    #    ssl_ciphers  HIGH:!aNULL:!MD5;
+    #    ssl_prefer_server_ciphers  on;
+
+    #    location / {
+    #        root   html;
+    #        index  index.html index.htm;
+    #    }
+    #}
+
+	include /usr/local/nginx/conf/conf.d/*.conf; // 引入server配置文件
+}
+
+
+以上是nginx.conf 配置（结束）
+
+
+
+以下是vhost.conf 配置方案一
+
+
+
+server {
+        listen       80;
+        server_name  test.com  www.test.com ; //虚拟域名
+        root  /var/www/pthink/public/;    //目录
+
+        
+        location / {
+	    // 隐藏index.php 开始
+            if (!-e $request_filename) {
+                rewrite  ^/(.*)$  /index.php?s=/$1  last;
+            }
+	    // 隐藏index.php 结束
+            index  index.html index.htm index.php;  //***默认文件呕心沥血查出来的结果***
+        }
+	
+	limit_conn perip 10;  　　　　 #单个客户端ip与服务器的连接数．
+        limit_conn perserver 100;　　＃限制与服务器的总连接数
+
+        location ~ .*\.php {
+            fastcgi_pass 127.0.0.1:9000;
+            fastcgi_index index.php;
+            fastcgi_split_path_info ^(.+\.php)(.*)$; #新加第一句
+            fastcgi_param PATH_INFO $fastcgi_path_info;#新加第二句
+            fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;#新加第三句
+            include fastcgi.conf;
+        }
+  
+       
+}
+
+
+
+
+
+
+以上是vhost.conf 配置方案一（结束）
+
+
+
+
+
+
+
+
+以下是vhost.conf 配置方案二
+
+
+upstream ltest_server {   //均衡负载 可配置多个服务器
+    server 127.0.0.1:80;
+    #server 127.0.0.1:8080;
+}
+
+
+server{
+    listen 80;
+    server_name test.com www.test.com;
+
+    
+    limit_conn perip 10;  　　　　 #单个客户端ip与服务器的连接数．
+    limit_conn perserver 100;　　＃限制与服务器的总连接数
+
+    location / {
+    
+        index  index.html index.htm index.php;
+
+        if (!-e $request_filename) {
+            rewrite  ^(.*)$  /index.php?s=/$1  break;
+        }
+
+        proxy_redirect off;
+        proxy_set_header Host $http_host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_pass http://test_server;
+    }
+
+}
+
+
+
+
+
+
+
+
+以上是vhost.conf 配置方案二（结束）
+
